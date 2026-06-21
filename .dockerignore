@@ -1,0 +1,6 @@
+# Excluye del contexto de imagen lo que no se sirve.
+README.md
+.gitignore
+.dockerignore
+*.log
+.DS_Store
