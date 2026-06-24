@@ -46,19 +46,32 @@ Vite **inyecta las variables `VITE_*` en tiempo de build**, no en runtime. Este 
 se generó en **modo demo** (`VITE_DATA_MODE=mock`): muestra datos de ejemplo y no
 necesita backend.
 
-Para cambiar el modo (p. ej. pasar a datos reales vía proxy n8n) o el password de
-acceso, **hay que regenerar el build** en el proyecto fuente con las variables y volver
-a publicar esta carpeta:
+Para pasar a **datos reales hay que regenerar el build** en el proyecto fuente con las
+variables del modo live y volver a publicar esta carpeta.
+
+### Modo live recomendado: Supabase
 
 ```bash
 # en la carpeta del proyecto fuente (dashboard/)
-VITE_DATA_MODE=n8n \
-VITE_N8N_BASE=https://n8n.srv994140.hstgr.cloud/webhook \
-VITE_DASH_TOKEN=<token> \
-VITE_DASH_PASSWORD=<password> \
+VITE_DATA_MODE=supabase \
+VITE_SUPABASE_URL=https://supabase.srv994140.hstgr.cloud \
+VITE_SUPABASE_ANON_KEY=<anon key del VPS> \
 npm run build
 # luego subir el nuevo contenido de dist/ al repo
 ```
 
-Password del panel por defecto en este build: **`lavaderos`** (cámbialo regenerando
-con `VITE_DASH_PASSWORD`).
+En modo supabase el acceso es por **email + password de Supabase Auth** (no por el password
+de demo). Antes de publicar, completar los pasos de despliegue de `supabase/schema.sql`
+(RLS + `GOTRUE_DISABLE_SIGNUP=true`).
+
+### Alternativa: proxy n8n
+
+```bash
+VITE_DATA_MODE=n8n \
+VITE_N8N_BASE=https://n8n.srv994140.hstgr.cloud/webhook \
+VITE_DASH_TOKEN=<token> \
+npm run build
+```
+
+> ⚠️ El password `lavaderos` es **solo de la demo** (modo mock/n8n). No es seguridad real
+> y no aplica en modo supabase. No publiques el build `mock` como entregable "live".
